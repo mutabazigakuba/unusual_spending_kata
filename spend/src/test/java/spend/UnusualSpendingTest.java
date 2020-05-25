@@ -1,7 +1,6 @@
 package spend;
 
 import static org.junit.Assert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -67,6 +66,7 @@ public class UnusualSpendingTest
         List<Payments> list = new ArrayList<>();
         list.add(new Payments(100, "Travel", 1, new Date(2020, 05, 22)));
         list.add(new Payments(50, "Travel", 1, new Date(2020, 04, 22)));
+        list.add(new Payments(20, "Enternaiment", 1, new Date(2020, 4, 3)));
         when(iPayments.getPayments(1)).thenReturn(list);
         IDetermineUnusualSpending determineUnusualSpending = mock(IDetermineUnusualSpending.class);
         IEmail iEmail = mock(IEmail.class);
@@ -76,7 +76,30 @@ public class UnusualSpendingTest
         List<HighSpending> actualList = subject.Compute(list, 1);
 
         assertThat("all of same size", actualList.size(), is(expectedList.size()));
+        verify(iPayments).getPayments(1);
+    }
 
+    @Test
+    public void moreThanOneUnusualSpendingByuser(){
+        IPayments iPayments = mock(IPayments.class);
+        List<Payments> list = new ArrayList<>();
+        list.add(new Payments(100, "Travel", 1, new Date(2020, 05, 22)));
+        list.add(new Payments(50, "Travel", 1, new Date(2020, 04, 22)));
+        list.add(new Payments(100, "Groceries", 1, new Date(2020, 05, 22)));
+        list.add(new Payments(50, "Groceries", 1, new Date(2020, 04, 22)));
+        list.add(new Payments(50, "Enternaiment", 1, new Date(2020, 04, 22)));
+        when(iPayments.getPayments(1)).thenReturn(list);
+        IDetermineUnusualSpending determineUnusualSpending = mock(IDetermineUnusualSpending.class);
+        IEmail iEmail = mock(IEmail.class);
+        subject = new UnusualSpending(iPayments, determineUnusualSpending, iEmail);
+        List<HighSpending> unsusalSpendingList = new ArrayList<>();
+        unsusalSpendingList.add(new HighSpending(150, "Travel"));
+        unsusalSpendingList.add(new HighSpending(150, "Groceries"));
+
+        List<HighSpending> expectedList = unsusalSpendingList;
+        List<HighSpending> actualList = subject.Compute(list, 1);
+
+        assertThat("All of same size", expectedList.size(), is(actualList.size()));
         verify(iPayments).getPayments(1);
     }
 }
