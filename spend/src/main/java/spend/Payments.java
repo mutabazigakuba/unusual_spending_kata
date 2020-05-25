@@ -2,7 +2,8 @@ package spend;
 
 import java.util.Date;
 
-public class Payments {
+public class Payments 
+{
     public Integer Price;
     public String Category;
     public Integer Id;

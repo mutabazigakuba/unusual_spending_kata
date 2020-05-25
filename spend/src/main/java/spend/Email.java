@@ -8,7 +8,8 @@ public class Email implements IEmail
 
     public void SendEmail(List<HighSpending> highSpendings)
     {
-        if(highSpendings.isEmpty()){
+        if(highSpendings.isEmpty())
+        {
             EmailToSend = "";
         }
         else

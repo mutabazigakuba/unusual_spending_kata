@@ -2,6 +2,7 @@ package spend;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -27,6 +28,7 @@ public class ExpendituresTest
         List<Payments> actualList = subject.getPayments(1);
 
         assertEquals(expectedList, actualList);
+        verify(iPayments).getPayments(1);
     }
 
     @Test

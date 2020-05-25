@@ -53,7 +53,8 @@ public class UnusualSpending implements IDetermineUnusualSpending
 
         for (int i = 0; i <= userPayments.size(); i++) 
         {
-            if(i+1 == userPayments.size()){
+            if(i+1 == userPayments.size())
+            {
                 break;
             }
             String currentCategory = userPayments.get(i).Category;
@@ -77,7 +78,8 @@ public class UnusualSpending implements IDetermineUnusualSpending
             Calendar cal = Calendar.getInstance();
             cal.setTime((Date) (list.get(i).Date));
             Integer _month = cal.get(Calendar.MONTH);
-            if(_month == month){
+            if(_month == month)
+            {
                 totalExpenditure += list.get(i).Price;
             }
         }

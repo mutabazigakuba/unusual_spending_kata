@@ -13,6 +13,7 @@ import java.util.List;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InOrder;
 import org.mockito.InjectMocks;
 import org.mockito.junit.MockitoJUnitRunner;
 import static org.hamcrest.CoreMatchers.*;
@@ -24,7 +25,7 @@ public class UnusualSpendingTest
     UnusualSpending subject;
 
     @Test
-    public void allInterfacesWereCalled()
+    public void allInterfacesShouldBeCalled()
     {
         IPayments iPayments = mock(IPayments.class);
         when(iPayments.getPayments(1)).thenReturn(new ArrayList<>());
@@ -55,7 +56,6 @@ public class UnusualSpendingTest
         List<HighSpending> actualList = subject.Compute(list, 1);
 
         assertEquals(new ArrayList<>(), actualList);
-
         verify(iPayments).getPayments(1);
     }
 
@@ -80,7 +80,8 @@ public class UnusualSpendingTest
     }
 
     @Test
-    public void moreThanOneUnusualSpendingByuser(){
+    public void moreThanOneUnusualSpendingByuser()
+    {
         IPayments iPayments = mock(IPayments.class);
         List<Payments> list = new ArrayList<>();
         list.add(new Payments(100, "Travel", 1, new Date(2020, 05, 22)));

@@ -2,9 +2,13 @@ package spend;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -14,8 +18,8 @@ import org.mockito.InjectMocks;
 import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-public class EmailTest {
-
+public class EmailTest 
+{
     @InjectMocks
     Email subject;
 
@@ -29,10 +33,13 @@ public class EmailTest {
         subject = new Email();
 
         String expectedEmail = "";
+
         subject.SendEmail(new ArrayList<>());
         String actualEmail = subject.EmailToSend;
 
         assertEquals(expectedEmail, actualEmail);
+        verifyZeroInteractions(unusualSpending);
+        verify(unusualSpending, times(0)).Compute(new ArrayList<>(), 1);
     }
 
     @Test
@@ -50,11 +57,12 @@ public class EmailTest {
         when(unusualSpending.Compute(paymentsList, 1)).thenReturn(highSpendingsList);
         subject = new Email();
 
-        String expectedEmail = "* You have spent 150 on Travel";
+        String expectedEmail = "* You have spent 150 on Travel ";
         subject.SendEmail(highSpendingsList);
         String actualEmail = subject.EmailToSend;
 
         assertEquals(expectedEmail, actualEmail);
+        verify(unusualSpending, times(0)).Compute(paymentsList, 1);
     }
 
     @Test
@@ -81,5 +89,6 @@ public class EmailTest {
         String actualEmail = subject.EmailToSend;
 
         assertEquals(expectedEmail, actualEmail);
+        verify(unusualSpending).Compute(paymentsList, 1);
     }
 }
