@@ -10,15 +10,12 @@ public class Email implements IEmail
     {
         if(highSpendings.isEmpty())
         {
-            EmailToSend = "";
+            EmailToSend = "* You have no unusual spendings ";
         }
         else
         {
-            for (int i = 0; i < highSpendings.size(); i++) 
-            {
-                Integer amount = highSpendings.get(i).Price;
-                String category = highSpendings.get(i).Cateogory;
-                EmailToSend += "* You have spent "+amount+" on "+category+" ";
+            for (HighSpending highSpending : highSpendings) {
+                EmailToSend += "* You have spent "+highSpending.Price+" on "+highSpending.Cateogory+" ";
             }
         }
     }
