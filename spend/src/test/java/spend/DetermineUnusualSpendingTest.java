@@ -29,14 +29,14 @@ public class DetermineUnusualSpendingTest
     public void zeroUnusualPaymentsByUser()
     {
         IPayments iPayments = mock(IPayments.class);
-        List<Payments> list = Arrays.asList(
+        List<Payments> paymentList = Arrays.asList(
             new Payments(150, Category.TRAVEL, 1, new Date(2020, currentMonth, 22)),
             new Payments(200, Category.TRAVEL, 1, new Date(2020, previousMonth, 22))
         );
-        when(iPayments.getPayments(1)).thenReturn(list);
+        when(iPayments.getPayments(1)).thenReturn(paymentList);
         subject = new DetermineUnusualSpending();
 
-        List<HighSpending> actualList = subject.Compute(list, 1);
+        List<HighSpending> actualList = subject.Compute(paymentList);
 
         assertEquals(new ArrayList<>(), actualList);
     }
@@ -54,7 +54,7 @@ public class DetermineUnusualSpendingTest
         subject = new DetermineUnusualSpending();
 
         List<HighSpending> expectedList = Arrays.asList(new HighSpending(150, Category.TRAVEL));
-        List<HighSpending> actualList = subject.Compute(list, 1);
+        List<HighSpending> actualList = subject.Compute(list);
 
         assertThat("all of same size", actualList.size(), is(expectedList.size()));
     }
@@ -77,7 +77,7 @@ public class DetermineUnusualSpendingTest
         unsusalSpendingList.add(new HighSpending(150, Category.GROCERIES));
 
         List<HighSpending> expectedList = unsusalSpendingList;
-        List<HighSpending> actualList = subject.Compute(list, 1);
+        List<HighSpending> actualList = subject.Compute(list);
 
         assertThat("All are of the same size", expectedList.size(), is(actualList.size()));
     }

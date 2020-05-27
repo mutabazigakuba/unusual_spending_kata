@@ -27,7 +27,7 @@ public class UnusualSpendingTest
         subject.triggerEmail(1);
 
         verify(iPayments).getPayments(1);
-        verify(determineUnusualSpending).Compute(new ArrayList<Payments>(), 1);
+        verify(determineUnusualSpending).Compute(new ArrayList<Payments>());
         verify(iEmail).SendEmail(new ArrayList<HighSpending>());
     }
 

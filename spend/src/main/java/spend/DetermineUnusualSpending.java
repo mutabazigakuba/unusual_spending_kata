@@ -10,7 +10,7 @@ public class DetermineUnusualSpending implements IDetermineUnusualSpending
 {
     private List<Payments> userPayments;
 
-    public List<HighSpending> Compute(List<Payments> payments, Integer id) 
+    public List<HighSpending> Compute(List<Payments> payments) 
     {
         userPayments = payments;
         List<HighSpending> unusualSpendings = new ArrayList<>();

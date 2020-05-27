@@ -18,7 +18,7 @@ public class UnusualSpending
     public void triggerEmail(Integer id)
     { 
         List<Payments> userPayments = Payment.getPayments(id);
-        List<HighSpending> listOfHighSpendings = DetermineUnusualSpending.Compute(userPayments, id);
+        List<HighSpending> listOfHighSpendings = DetermineUnusualSpending.Compute(userPayments);
         Email.SendEmail(listOfHighSpendings);
     }
     
