@@ -20,15 +20,18 @@ public class DetermineUnusualSpending implements IDetermineUnusualSpending
          * Long numberOfCategories = payments.stream().distinct().count();
          */
 
-         Integer numberOfCategories = Category.values().length;
+        Integer numberOfCategories = Category.values().length;
 
         for (int i = 0; i < numberOfCategories; i++) 
         {
             Category category = Category.values()[i];
+
             LocalDate today = LocalDate.now();
             Integer currentMonth = today.getMonthValue();
+
             Integer previousTotalExpenditures = getMonthlyExpenditures(category, (currentMonth - 1));
             Integer currentTotalExpenditures = getMonthlyExpenditures(category, currentMonth);
+            
             if (currentTotalExpenditures > ((1.5) * previousTotalExpenditures)) 
             {
                 unusualSpendings.add(new HighSpending(previousTotalExpenditures + currentTotalExpenditures,
@@ -40,31 +43,30 @@ public class DetermineUnusualSpending implements IDetermineUnusualSpending
 
     private Integer getMonthlyExpenditures(Category category, Integer month) 
     {
-        List<Payments> list = getCategoryPayments(category);
+        List<Payments> categoryPayments = getSpecificCategoryPayments(category);
         Integer totalExpenditure = 0;
 
-        for (int i = 0; i < list.size(); i++) 
-        {
+        for (Payments payments : categoryPayments) {
             Calendar cal = Calendar.getInstance();
-            cal.setTime((Date) (list.get(i).Date));
+            cal.setTime(payments.Date);
             Integer _month = cal.get(Calendar.MONTH);
-            if (_month == month) 
+            if(_month == month)
             {
-                totalExpenditure += list.get(i).Price;
+                totalExpenditure += payments.Price;
             }
         }
         return totalExpenditure;
     }
 
-    private List<Payments> getCategoryPayments(Category category) 
+    private List<Payments> getSpecificCategoryPayments(Category category) 
     {
         List<Payments> categoryList = new ArrayList<>();
-        for (int i = 0; i < userPayments.size(); i++) 
-        {
-            if (category == userPayments.get(i).Category) 
-            {
-                categoryList.add(userPayments.get(i));
-            }
+
+        for (Payments payments : userPayments) {
+           if(category == payments.Category)
+           {
+               categoryList.add(payments);
+           }
         }
         return categoryList;
     }
