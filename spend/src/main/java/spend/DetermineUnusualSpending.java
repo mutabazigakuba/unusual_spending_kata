@@ -1,6 +1,7 @@
 package spend;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -22,10 +23,13 @@ public class DetermineUnusualSpending implements IDetermineUnusualSpending
         for (int i = 0; i < getCategories().size(); i++) 
         {
             String category = getCategories().get(i);
-            /** How To Make monthToCheck dynamic */
-            Integer monthToCheck = 5;
-            Integer previousTotalExpenditures = getMonthlyExpenditures(category, (monthToCheck - 1));
-            Integer currentTotalExpenditures = getMonthlyExpenditures(category, monthToCheck);
+            /** 
+             * How To Make monthToCheck dynamic 
+             */
+            LocalDate today = LocalDate.now();
+            Integer currentMonth = today.getMonthValue();
+            Integer previousTotalExpenditures = getMonthlyExpenditures(category, (currentMonth - 1));
+            Integer currentTotalExpenditures = getMonthlyExpenditures(category, currentMonth);
             if (currentTotalExpenditures > ((1.5) * previousTotalExpenditures)) 
             {
                 unusualSpendings.add(new HighSpending(previousTotalExpenditures + currentTotalExpenditures,

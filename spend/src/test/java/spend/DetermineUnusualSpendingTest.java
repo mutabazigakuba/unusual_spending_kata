@@ -6,6 +6,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -19,14 +20,18 @@ public class DetermineUnusualSpendingTest
 {
     @InjectMocks
     DetermineUnusualSpending subject;
+
+    LocalDate today = LocalDate.now();
+    Integer currentMonth = today.getMonthValue();
+    Integer previousMonth = currentMonth-1;
     
     @Test
     public void zeroUnusualPaymentsByUser()
     {
         IPayments iPayments = mock(IPayments.class);
         List<Payments> list = Arrays.asList(
-            new Payments(150, "Travel", 1, new Date(2020, 05, 22)),
-            new Payments(200, "Travel", 1, new Date(2020, 04, 22))
+            new Payments(150, "Travel", 1, new Date(2020, currentMonth, 22)),
+            new Payments(200, "Travel", 1, new Date(2020, previousMonth, 22))
         );
         when(iPayments.getPayments(1)).thenReturn(list);
         subject = new DetermineUnusualSpending();
@@ -41,9 +46,9 @@ public class DetermineUnusualSpendingTest
     {
         IPayments iPayments = mock(IPayments.class);
         List<Payments> list = Arrays.asList(
-            new Payments(100, "Travel", 1, new Date(2020, 05, 22)),
-            new Payments(50, "Travel", 1, new Date(2020, 04, 22)),
-            new Payments(20, "Enternaiment", 1, new Date(2020, 4, 3))
+            new Payments(100, "Travel", 1, new Date(2020, currentMonth, 22)),
+            new Payments(50, "Travel", 1, new Date(2020, previousMonth, 22)),
+            new Payments(20, "Enternaiment", 1, new Date(2020, previousMonth, 3))
         );
         when(iPayments.getPayments(1)).thenReturn(list);
         subject = new DetermineUnusualSpending();
@@ -59,11 +64,11 @@ public class DetermineUnusualSpendingTest
     {
         IPayments iPayments = mock(IPayments.class);
         List<Payments> list = Arrays.asList(
-            new Payments(100, "Travel", 1, new Date(2020, 05, 22)),
-            new Payments(50, "Travel", 1, new Date(2020, 04, 22)),
-            new Payments(100, "Groceries", 1, new Date(2020, 05, 22)),
-            new Payments(50, "Groceries", 1, new Date(2020, 04, 22)),
-            new Payments(50, "Enternaiment", 1, new Date(2020, 04, 22))
+            new Payments(100, "Travel", 1, new Date(2020, currentMonth, 22)),
+            new Payments(50, "Travel", 1, new Date(2020, previousMonth, 22)),
+            new Payments(100, "Groceries", 1, new Date(2020, currentMonth, 22)),
+            new Payments(50, "Groceries", 1, new Date(2020, previousMonth, 22)),
+            new Payments(50, "Enternaiment", 1, new Date(2020, previousMonth, 22))
             );
         when(iPayments.getPayments(1)).thenReturn(list);
         subject = new DetermineUnusualSpending();
