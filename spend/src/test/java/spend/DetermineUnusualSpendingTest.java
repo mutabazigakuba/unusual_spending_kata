@@ -3,6 +3,7 @@ package spend;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.sql.Date;
@@ -28,12 +29,10 @@ public class DetermineUnusualSpendingTest
     @Test
     public void zeroUnusualPaymentsByUser()
     {
-        IPayments iPayments = mock(IPayments.class);
         List<Payments> paymentList = Arrays.asList(
             new Payments(150, Category.TRAVEL, 1, new Date(2020, currentMonth, 22)),
             new Payments(200, Category.TRAVEL, 1, new Date(2020, previousMonth, 22))
         );
-        when(iPayments.getPayments(1)).thenReturn(paymentList);
         subject = new DetermineUnusualSpending();
 
         List<HighSpending> actualList = subject.Compute(paymentList);
@@ -44,13 +43,11 @@ public class DetermineUnusualSpendingTest
     @Test
     public void oneUnusualSpendingByUser()
     {
-        IPayments iPayments = mock(IPayments.class);
         List<Payments> list = Arrays.asList(
             new Payments(100, Category.TRAVEL, 1, new Date(2020, currentMonth, 22)),
             new Payments(50, Category.TRAVEL, 1, new Date(2020, previousMonth, 22)),
             new Payments(20, Category.ENTERNAINMENT, 1, new Date(2020, previousMonth, 3))
         );
-        when(iPayments.getPayments(1)).thenReturn(list);
         subject = new DetermineUnusualSpending();
 
         List<HighSpending> expectedList = Arrays.asList(new HighSpending(150, Category.TRAVEL));
@@ -62,7 +59,6 @@ public class DetermineUnusualSpendingTest
     @Test
     public void moreThanOneUnusualSpendingByuser()
     {
-        IPayments iPayments = mock(IPayments.class);
         List<Payments> list = Arrays.asList(
             new Payments(100, Category.TRAVEL, 1, new Date(2020, currentMonth, 22)),
             new Payments(50, Category.TRAVEL, 1, new Date(2020, previousMonth, 22)),
@@ -70,7 +66,6 @@ public class DetermineUnusualSpendingTest
             new Payments(50, Category.GROCERIES, 1, new Date(2020, previousMonth, 22)),
             new Payments(50, Category.ENTERNAINMENT, 1, new Date(2020, previousMonth, 22))
             );
-        when(iPayments.getPayments(1)).thenReturn(list);
         subject = new DetermineUnusualSpending();
         List<HighSpending> unsusalSpendingList = new ArrayList<>();
         unsusalSpendingList.add(new HighSpending(150, Category.TRAVEL));
