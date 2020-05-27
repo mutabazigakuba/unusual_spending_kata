@@ -14,10 +14,10 @@ public class Expenditures implements IPayments
 
     public List<Payments> getPayments(Integer id)
     {
-        if (IPayments.getPayments(1).isEmpty())
+        if (IPayments.getPayments(id).isEmpty())
         {
             return new ArrayList<>();
         }
-        return IPayments.getPayments(1);
+        return IPayments.getPayments(id);
     }
 }
