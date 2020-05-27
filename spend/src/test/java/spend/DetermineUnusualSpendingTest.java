@@ -30,8 +30,8 @@ public class DetermineUnusualSpendingTest
     {
         IPayments iPayments = mock(IPayments.class);
         List<Payments> list = Arrays.asList(
-            new Payments(150, "Travel", 1, new Date(2020, currentMonth, 22)),
-            new Payments(200, "Travel", 1, new Date(2020, previousMonth, 22))
+            new Payments(150, Category.TRAVEL, 1, new Date(2020, currentMonth, 22)),
+            new Payments(200, Category.TRAVEL, 1, new Date(2020, previousMonth, 22))
         );
         when(iPayments.getPayments(1)).thenReturn(list);
         subject = new DetermineUnusualSpending();
@@ -46,14 +46,14 @@ public class DetermineUnusualSpendingTest
     {
         IPayments iPayments = mock(IPayments.class);
         List<Payments> list = Arrays.asList(
-            new Payments(100, "Travel", 1, new Date(2020, currentMonth, 22)),
-            new Payments(50, "Travel", 1, new Date(2020, previousMonth, 22)),
-            new Payments(20, "Enternaiment", 1, new Date(2020, previousMonth, 3))
+            new Payments(100, Category.TRAVEL, 1, new Date(2020, currentMonth, 22)),
+            new Payments(50, Category.TRAVEL, 1, new Date(2020, previousMonth, 22)),
+            new Payments(20, Category.ENTERNAINMENT, 1, new Date(2020, previousMonth, 3))
         );
         when(iPayments.getPayments(1)).thenReturn(list);
         subject = new DetermineUnusualSpending();
 
-        List<HighSpending> expectedList = Arrays.asList(new HighSpending(150, "Travel"));
+        List<HighSpending> expectedList = Arrays.asList(new HighSpending(150, Category.TRAVEL));
         List<HighSpending> actualList = subject.Compute(list, 1);
 
         assertThat("all of same size", actualList.size(), is(expectedList.size()));
@@ -64,17 +64,17 @@ public class DetermineUnusualSpendingTest
     {
         IPayments iPayments = mock(IPayments.class);
         List<Payments> list = Arrays.asList(
-            new Payments(100, "Travel", 1, new Date(2020, currentMonth, 22)),
-            new Payments(50, "Travel", 1, new Date(2020, previousMonth, 22)),
-            new Payments(100, "Groceries", 1, new Date(2020, currentMonth, 22)),
-            new Payments(50, "Groceries", 1, new Date(2020, previousMonth, 22)),
-            new Payments(50, "Enternaiment", 1, new Date(2020, previousMonth, 22))
+            new Payments(100, Category.TRAVEL, 1, new Date(2020, currentMonth, 22)),
+            new Payments(50, Category.TRAVEL, 1, new Date(2020, previousMonth, 22)),
+            new Payments(100, Category.GROCERIES, 1, new Date(2020, currentMonth, 22)),
+            new Payments(50, Category.GROCERIES, 1, new Date(2020, previousMonth, 22)),
+            new Payments(50, Category.ENTERNAINMENT, 1, new Date(2020, previousMonth, 22))
             );
         when(iPayments.getPayments(1)).thenReturn(list);
         subject = new DetermineUnusualSpending();
         List<HighSpending> unsusalSpendingList = new ArrayList<>();
-        unsusalSpendingList.add(new HighSpending(150, "Travel"));
-        unsusalSpendingList.add(new HighSpending(150, "Groceries"));
+        unsusalSpendingList.add(new HighSpending(150, Category.TRAVEL));
+        unsusalSpendingList.add(new HighSpending(150, Category.GROCERIES));
 
         List<HighSpending> expectedList = unsusalSpendingList;
         List<HighSpending> actualList = subject.Compute(list, 1);

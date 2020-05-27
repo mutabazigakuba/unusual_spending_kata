@@ -32,10 +32,10 @@ public class EmailTest
     public void oneUnusualSpendingByUser()
     {
         List<HighSpending> highSpendingsList = new ArrayList<>();
-        highSpendingsList.add(new HighSpending(150, "Travel"));
+        highSpendingsList.add(new HighSpending(150, Category.TRAVEL));
         subject = new Email();
 
-        String expectedEmail = "* You have spent 150 on Travel ";
+        String expectedEmail = "* You have spent 150 on TRAVEL ";
         subject.SendEmail(highSpendingsList);
         String actualEmail = subject.EmailToSend;
 
@@ -46,12 +46,12 @@ public class EmailTest
     public void moreThanOneUnusualSpendingByUser()
     {
         List<HighSpending> unsusalSpendingList = new ArrayList<>();
-        unsusalSpendingList.add(new HighSpending(150, "Travel"));
-        unsusalSpendingList.add(new HighSpending(150, "Groceries"));
+        unsusalSpendingList.add(new HighSpending(150, Category.TRAVEL));
+        unsusalSpendingList.add(new HighSpending(150, Category.GROCERIES));
         subject = new Email();
         
 
-        String expectedEmail = "* You have spent 150 on Travel * You have spent 150 on Groceries ";
+        String expectedEmail = "* You have spent 150 on TRAVEL * You have spent 150 on GROCERIES ";
         subject.SendEmail(unsusalSpendingList);
         String actualEmail = subject.EmailToSend;
 

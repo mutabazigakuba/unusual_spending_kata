@@ -3,9 +3,9 @@ package spend;
 public class HighSpending 
 {
     public Integer Price;
-    public String Cateogory;
+    public Category Cateogory;
 
-    public HighSpending(Integer price, String category)
+    public HighSpending(Integer price, Category category)
     {
         Price = price;
         Cateogory = category;

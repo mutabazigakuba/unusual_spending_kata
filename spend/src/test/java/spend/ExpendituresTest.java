@@ -46,8 +46,8 @@ public class ExpendituresTest
     {
         IPayments iPayments = mock(IPayments.class);
         List<Payments> list = Arrays.asList(
-            new Payments(150, "Travel", 1, new Date(2020, currentMonth, 12)),
-            new Payments(150, "Travel", 1, new Date(2020, previousMonth, 12))
+            new Payments(150, Category.TRAVEL, 1, new Date(2020, currentMonth, 12)),
+            new Payments(150, Category.TRAVEL, 1, new Date(2020, previousMonth, 12))
         );
         when(iPayments.getPayments(1)).thenReturn(list);
         subject = new Expenditures(iPayments);

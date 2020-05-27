@@ -20,12 +20,11 @@ public class DetermineUnusualSpending implements IDetermineUnusualSpending
          * Long numberOfCategories = payments.stream().distinct().count();
          */
 
-        for (int i = 0; i < getCategories().size(); i++) 
+         Integer numberOfCategories = Category.values().length;
+
+        for (int i = 0; i < numberOfCategories; i++) 
         {
-            String category = getCategories().get(i);
-            /** 
-             * How To Make monthToCheck dynamic 
-             */
+            Category category = Category.values()[i];
             LocalDate today = LocalDate.now();
             Integer currentMonth = today.getMonthValue();
             Integer previousTotalExpenditures = getMonthlyExpenditures(category, (currentMonth - 1));
@@ -39,29 +38,7 @@ public class DetermineUnusualSpending implements IDetermineUnusualSpending
         return unusualSpendings;
     }
 
-    private List<String> getCategories() 
-    {
-        List<String> categoryList = new ArrayList<>();
-        categoryList.add(userPayments.get(0).Category);
-
-        for (int i = 0; i <= userPayments.size(); i++) 
-        {
-            if (i + 1 == userPayments.size()) 
-            {
-                break;
-            }
-            String currentCategory = userPayments.get(i).Category;
-            String nextCategory = userPayments.get(i + 1).Category;
-            if (currentCategory != nextCategory) 
-            {
-                categoryList.add(nextCategory);
-            }
-
-        }
-        return categoryList;
-    }
-
-    private Integer getMonthlyExpenditures(String category, Integer month) 
+    private Integer getMonthlyExpenditures(Category category, Integer month) 
     {
         List<Payments> list = getCategoryPayments(category);
         Integer totalExpenditure = 0;
@@ -79,7 +56,7 @@ public class DetermineUnusualSpending implements IDetermineUnusualSpending
         return totalExpenditure;
     }
 
-    private List<Payments> getCategoryPayments(String category) 
+    private List<Payments> getCategoryPayments(Category category) 
     {
         List<Payments> categoryList = new ArrayList<>();
         for (int i = 0; i < userPayments.size(); i++) 
