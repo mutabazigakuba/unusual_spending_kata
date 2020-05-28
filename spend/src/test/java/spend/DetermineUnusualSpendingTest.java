@@ -2,9 +2,6 @@ package spend;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 import java.sql.Date;
 import java.time.LocalDate;
@@ -35,9 +32,10 @@ public class DetermineUnusualSpendingTest
         );
         subject = new DetermineUnusualSpending();
 
+        List<HighSpending> expectedList = new ArrayList<>();
         List<HighSpending> actualList = subject.Compute(paymentList);
 
-        assertEquals(new ArrayList<>(), actualList);
+        assertEquals(expectedList, actualList);
     }
 
     @Test

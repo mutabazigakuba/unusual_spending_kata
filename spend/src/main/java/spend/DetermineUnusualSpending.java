@@ -1,6 +1,5 @@
 package spend;
 
-import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -14,11 +13,6 @@ public class DetermineUnusualSpending implements IDetermineUnusualSpending
     {
         userPayments = payments;
         List<HighSpending> unusualSpendings = new ArrayList<>();
-
-        /** 
-         * List<Payments> categories = payments.stream().distinct().collect(Collectors.toList());
-         * Long numberOfCategories = payments.stream().distinct().count();
-         */
 
         Integer numberOfCategories = Category.values().length;
 
