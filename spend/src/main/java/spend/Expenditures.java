@@ -6,7 +6,7 @@ import java.util.List;
 public class Expenditures implements IPayments
 {
 
-    public List<Payments> getPayments(Integer id)
+    public List<Payment> getPayments(Integer id)
     {
         return new ArrayList<>();
     }

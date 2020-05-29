@@ -2,34 +2,30 @@ package spend;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 public class DetermineUnusualSpending implements IDetermineUnusualSpending 
 {
-    private List<Payments> userPayments;
+    private List<Payment> userPayments;
 
-    public List<HighSpending> Compute(List<Payments> payments) 
+    public List<HighSpending> Compute(List<Payment> payments) 
     {
         userPayments = payments;
         List<HighSpending> unusualSpendings = new ArrayList<>();
 
-        Integer numberOfCategories = Category.values().length;
+        LocalDate today = LocalDate.now();
+        Integer currentMonth = today.getMonthValue();
+        Integer previousMonth = currentMonth - 1;
 
-        for (int i = 0; i < numberOfCategories; i++) 
+        for (Category category : Category.values())
         {
-            Category category = Category.values()[i];
-
-            LocalDate today = LocalDate.now();
-            Integer currentMonth = today.getMonthValue();
-
-            Integer previousTotalExpenditures = getMonthlyExpenditures(category, (currentMonth - 1));
+            Integer previousTotalExpenditures = getMonthlyExpenditures(category, previousMonth);
             Integer currentTotalExpenditures = getMonthlyExpenditures(category, currentMonth);
             
             if (currentTotalExpenditures > ((1.5) * previousTotalExpenditures)) 
             {
                 unusualSpendings.add(new HighSpending(previousTotalExpenditures + currentTotalExpenditures,
-                        payments.get(i).Category));
+                        category));
             }
         }
         return unusualSpendings;
@@ -37,13 +33,11 @@ public class DetermineUnusualSpending implements IDetermineUnusualSpending
 
     private Integer getMonthlyExpenditures(Category category, Integer month) 
     {
-        List<Payments> categoryPayments = getSpecificCategoryPayments(category);
+        List<Payment> categoryPayments = getSpecificCategoryPayments(category);
         Integer totalExpenditure = 0;
 
-        for (Payments payments : categoryPayments) {
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(payments.Date);
-            Integer _month = cal.get(Calendar.MONTH);
+        for (Payment payments : categoryPayments) {
+            Integer _month = payments.Date.getMonthValue();
             if(_month == month)
             {
                 totalExpenditure += payments.Price;
@@ -52,11 +46,11 @@ public class DetermineUnusualSpending implements IDetermineUnusualSpending
         return totalExpenditure;
     }
 
-    private List<Payments> getSpecificCategoryPayments(Category category) 
+    private List<Payment> getSpecificCategoryPayments(Category category) 
     {
-        List<Payments> categoryList = new ArrayList<>();
+        List<Payment> categoryList = new ArrayList<>();
 
-        for (Payments payments : userPayments) {
+        for (Payment payments : userPayments) {
            if(category == payments.Category)
            {
                categoryList.add(payments);

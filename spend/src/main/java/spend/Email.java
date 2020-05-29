@@ -4,18 +4,18 @@ import java.util.List;
 
 public class Email implements IEmail
 {
-    public String EmailToSend = "";
+    public String message = "";
 
     public void SendEmail(List<HighSpending> highSpendings)
     {
         if(highSpendings.isEmpty())
         {
-            EmailToSend = "* You have no unusual spendings ";
+            message = "* You have no unusual spendings ";
         }
         else
         {
             for (HighSpending highSpending : highSpendings) {
-                EmailToSend += "* You have spent "+highSpending.Price+" on "+highSpending.Cateogory+" ";
+                message += "* You have spent "+highSpending.Price+" on "+highSpending.Cateogory+"\n";
             }
         }
     }

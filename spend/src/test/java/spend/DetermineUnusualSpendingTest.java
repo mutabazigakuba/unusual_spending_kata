@@ -3,20 +3,16 @@ package spend;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
-import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 import org.junit.Test;
-import org.mockito.InjectMocks;
 import static org.hamcrest.CoreMatchers.*;
 
 
 public class DetermineUnusualSpendingTest 
 {
-    @InjectMocks
     DetermineUnusualSpending subject;
 
     LocalDate today = LocalDate.now();
@@ -26,9 +22,9 @@ public class DetermineUnusualSpendingTest
     @Test
     public void zeroUnusualPaymentsByUser()
     {
-        List<Payments> paymentList = Arrays.asList(
-            new Payments(150, Category.TRAVEL, 1, new Date(2020, currentMonth, 22)),
-            new Payments(200, Category.TRAVEL, 1, new Date(2020, previousMonth, 22))
+        List<Payment> paymentList = Arrays.asList(
+            new Payment(150, Category.TRAVEL, 1, LocalDate.of(2020, currentMonth, 22)),
+            new Payment(200, Category.TRAVEL, 1, LocalDate.of(2020, previousMonth, 22))
         );
         subject = new DetermineUnusualSpending();
 
@@ -41,10 +37,10 @@ public class DetermineUnusualSpendingTest
     @Test
     public void oneUnusualSpendingByUser()
     {
-        List<Payments> list = Arrays.asList(
-            new Payments(100, Category.TRAVEL, 1, new Date(2020, currentMonth, 22)),
-            new Payments(50, Category.TRAVEL, 1, new Date(2020, previousMonth, 22)),
-            new Payments(20, Category.ENTERNAINMENT, 1, new Date(2020, previousMonth, 3))
+        List<Payment> list = Arrays.asList(
+            new Payment(100, Category.TRAVEL, 1, LocalDate.of(2020, currentMonth, 22)),
+            new Payment(50, Category.TRAVEL, 1, LocalDate.of(2020, previousMonth, 22)),
+            new Payment(20, Category.ENTERNAINMENT, 1, LocalDate.of(2020, previousMonth, 3))
         );
         subject = new DetermineUnusualSpending();
 
@@ -52,26 +48,31 @@ public class DetermineUnusualSpendingTest
         List<HighSpending> actualList = subject.Compute(list);
 
         assertThat("all of same size", actualList.size(), is(expectedList.size()));
+        assertEquals(1, actualList.size());
+        assertEquals(Category.TRAVEL, actualList.get(0).Cateogory);
     }
 
     @Test
     public void moreThanOneUnusualSpendingByuser()
     {
-        List<Payments> list = Arrays.asList(
-            new Payments(100, Category.TRAVEL, 1, new Date(2020, currentMonth, 22)),
-            new Payments(50, Category.TRAVEL, 1, new Date(2020, previousMonth, 22)),
-            new Payments(100, Category.GROCERIES, 1, new Date(2020, currentMonth, 22)),
-            new Payments(50, Category.GROCERIES, 1, new Date(2020, previousMonth, 22)),
-            new Payments(50, Category.ENTERNAINMENT, 1, new Date(2020, previousMonth, 22))
+        List<Payment> list = Arrays.asList(
+            new Payment(100, Category.TRAVEL, 1, LocalDate.of(2020, currentMonth, 22)),
+            new Payment(50, Category.TRAVEL, 1, LocalDate.of(2020, previousMonth, 22)),
+            new Payment(100, Category.GROCERIES, 1, LocalDate.of(2020, currentMonth, 22)),
+            new Payment(70, Category.GROCERIES, 1, LocalDate.of(2020, previousMonth, 22)),
+            new Payment(50, Category.ENTERNAINMENT, 1, LocalDate.of(2020, currentMonth, 22))
             );
         subject = new DetermineUnusualSpending();
-        List<HighSpending> unsusalSpendingList = new ArrayList<>();
-        unsusalSpendingList.add(new HighSpending(150, Category.TRAVEL));
-        unsusalSpendingList.add(new HighSpending(150, Category.GROCERIES));
+        List<HighSpending> unsusalSpendingList = Arrays.asList(
+            new HighSpending(150, Category.TRAVEL),
+            new HighSpending(170, Category.GROCERIES)
+            );
 
         List<HighSpending> expectedList = unsusalSpendingList;
         List<HighSpending> actualList = subject.Compute(list);
 
         assertThat("All are of the same size", expectedList.size(), is(actualList.size()));
+        assertEquals(2, actualList.size());
+        assertEquals(Category.TRAVEL, actualList.get(0).Cateogory);
     }
 }

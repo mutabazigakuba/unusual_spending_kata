@@ -3,17 +3,13 @@ package spend;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.junit.MockitoJUnitRunner;
 
-@RunWith(MockitoJUnitRunner.class)
 public class EmailTest 
 {
-    @InjectMocks
     Email subject;
 
     @Test
@@ -23,7 +19,7 @@ public class EmailTest
 
         String expectedEmail = "* You have no unusual spendings ";
         subject.SendEmail(new ArrayList<>());
-        String actualEmail = subject.EmailToSend;
+        String actualEmail = subject.message;
 
         assertEquals(expectedEmail, actualEmail);
     }
@@ -35,9 +31,9 @@ public class EmailTest
         highSpendingsList.add(new HighSpending(150, Category.TRAVEL));
         subject = new Email();
 
-        String expectedEmail = "* You have spent 150 on TRAVEL ";
+        String expectedEmail = "* You have spent 150 on TRAVEL"+"\n";
         subject.SendEmail(highSpendingsList);
-        String actualEmail = subject.EmailToSend;
+        String actualEmail = subject.message;
 
         assertEquals(expectedEmail, actualEmail);
     }
@@ -45,15 +41,16 @@ public class EmailTest
     @Test
     public void moreThanOneUnusualSpendingByUser()
     {
-        List<HighSpending> unsusalSpendingList = new ArrayList<>();
-        unsusalSpendingList.add(new HighSpending(150, Category.TRAVEL));
-        unsusalSpendingList.add(new HighSpending(150, Category.GROCERIES));
+        List<HighSpending> unsusalSpendingList = Arrays.asList(
+            new HighSpending(150, Category.TRAVEL),
+            new HighSpending(150, Category.GROCERIES)
+            );
         subject = new Email();
         
 
-        String expectedEmail = "* You have spent 150 on TRAVEL * You have spent 150 on GROCERIES ";
+        String expectedEmail = "* You have spent 150 on TRAVEL"+"\n"+ "* You have spent 150 on GROCERIES"+"\n";
         subject.SendEmail(unsusalSpendingList);
-        String actualEmail = subject.EmailToSend;
+        String actualEmail = subject.message;
 
         assertEquals(expectedEmail, actualEmail);
     }

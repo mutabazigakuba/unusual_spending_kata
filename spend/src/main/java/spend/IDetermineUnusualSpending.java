@@ -4,5 +4,5 @@ import java.util.List;
 
 public interface IDetermineUnusualSpending
 {
-    List<HighSpending> Compute(List<Payments> payments);
+    List<HighSpending> Compute(List<Payment> payments);
 }
