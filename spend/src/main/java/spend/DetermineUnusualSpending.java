@@ -1,6 +1,5 @@
 package spend;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +16,7 @@ public class DetermineUnusualSpending implements IDetermineUnusualSpending
          * LocalDate today = LocalDate.now();
             Integer currentMonth = today.getMonthValue();
          */
-        
+
         Integer currentMonth = userPayments.get(0).Date.getMonthValue();
         Integer previousMonth = currentMonth - 1;
 
