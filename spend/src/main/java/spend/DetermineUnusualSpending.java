@@ -13,9 +13,17 @@ public class DetermineUnusualSpending implements IDetermineUnusualSpending
         userPayments = payments;
         List<HighSpending> unusualSpendings = new ArrayList<>();
 
-        LocalDate today = LocalDate.now();
-        Integer currentMonth = today.getMonthValue();
+        /**
+         * LocalDate today = LocalDate.now();
+            Integer currentMonth = today.getMonthValue();
+         */
+        
+        Integer currentMonth = userPayments.get(0).Date.getMonthValue();
         Integer previousMonth = currentMonth - 1;
+
+        if(previousMonth < 0){
+            previousMonth = 12;
+        }
 
         for (Category category : Category.values())
         {
@@ -36,7 +44,8 @@ public class DetermineUnusualSpending implements IDetermineUnusualSpending
         List<Payment> categoryPayments = getSpecificCategoryPayments(category);
         Integer totalExpenditure = 0;
 
-        for (Payment payments : categoryPayments) {
+        for (Payment payments : categoryPayments) 
+        {
             Integer _month = payments.Date.getMonthValue();
             if(_month == month)
             {
@@ -50,7 +59,8 @@ public class DetermineUnusualSpending implements IDetermineUnusualSpending
     {
         List<Payment> categoryList = new ArrayList<>();
 
-        for (Payment payments : userPayments) {
+        for (Payment payments : userPayments) 
+        {
            if(category == payments.Category)
            {
                categoryList.add(payments);

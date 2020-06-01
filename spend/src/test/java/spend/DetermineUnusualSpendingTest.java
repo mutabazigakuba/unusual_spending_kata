@@ -37,7 +37,7 @@ public class DetermineUnusualSpendingTest
     @Test
     public void oneUnusualSpendingByUser()
     {
-        List<Payment> list = Arrays.asList(
+        List<Payment> paymentList = Arrays.asList(
             new Payment(100, Category.TRAVEL, 1, LocalDate.of(2020, currentMonth, 22)),
             new Payment(50, Category.TRAVEL, 1, LocalDate.of(2020, previousMonth, 22)),
             new Payment(20, Category.ENTERNAINMENT, 1, LocalDate.of(2020, previousMonth, 3))
@@ -45,7 +45,7 @@ public class DetermineUnusualSpendingTest
         subject = new DetermineUnusualSpending();
 
         List<HighSpending> expectedList = Arrays.asList(new HighSpending(150, Category.TRAVEL));
-        List<HighSpending> actualList = subject.Compute(list);
+        List<HighSpending> actualList = subject.Compute(paymentList);
 
         assertThat("all of same size", actualList.size(), is(expectedList.size()));
         assertEquals(1, actualList.size());
@@ -55,7 +55,7 @@ public class DetermineUnusualSpendingTest
     @Test
     public void moreThanOneUnusualSpendingByuser()
     {
-        List<Payment> list = Arrays.asList(
+        List<Payment> paymentList = Arrays.asList(
             new Payment(100, Category.TRAVEL, 1, LocalDate.of(2020, currentMonth, 22)),
             new Payment(50, Category.TRAVEL, 1, LocalDate.of(2020, previousMonth, 22)),
             new Payment(100, Category.GROCERIES, 1, LocalDate.of(2020, currentMonth, 22)),
@@ -69,10 +69,27 @@ public class DetermineUnusualSpendingTest
             );
 
         List<HighSpending> expectedList = unsusalSpendingList;
-        List<HighSpending> actualList = subject.Compute(list);
+        List<HighSpending> actualList = subject.Compute(paymentList);
 
         assertThat("All are of the same size", expectedList.size(), is(actualList.size()));
         assertEquals(2, actualList.size());
         assertEquals(Category.TRAVEL, actualList.get(0).Cateogory);
+    }
+
+    @Test
+    public void oneUnusualSpendingByUserInDifferentYear()
+    {
+        List<Payment> paymentList = Arrays.asList(
+            new Payment(100, Category.TRAVEL, 1, LocalDate.of(2020, 01, 22)),
+            new Payment(50, Category.TRAVEL, 1, LocalDate.of(2019, 12, 22)),
+            new Payment(20, Category.ENTERNAINMENT, 1, LocalDate.of(2020, 9, 03))
+        );
+        subject = new DetermineUnusualSpending();
+
+        List<HighSpending> expectedList = Arrays.asList(new HighSpending(150, Category.TRAVEL));
+        List<HighSpending> actualList = subject.Compute(paymentList);
+
+        assertThat("all of same size", actualList.size(), is(expectedList.size()));
+        assertEquals(1, actualList.size());
     }
 }
