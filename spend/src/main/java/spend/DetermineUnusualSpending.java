@@ -1,5 +1,6 @@
 package spend;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,17 +13,10 @@ public class DetermineUnusualSpending implements IDetermineUnusualSpending
         userPayments = payments;
         List<HighSpending> unusualSpendings = new ArrayList<>();
 
-        /**
-         * LocalDate today = LocalDate.now();
-            Integer currentMonth = today.getMonthValue();
-         */
-
-        Integer currentMonth = userPayments.get(0).Date.getMonthValue();
-        Integer previousMonth = currentMonth - 1;
-
-        if(previousMonth < 0){
-            previousMonth = 12;
-        }
+        
+        LocalDate today = LocalDate.now();
+        Integer currentMonth = today.getMonthValue();
+        Integer previousMonth = currentMonth == 1 ? 12 : currentMonth - 1;
 
         for (Category category : Category.values())
         {

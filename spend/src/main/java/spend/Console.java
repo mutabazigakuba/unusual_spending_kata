@@ -1,9 +1,11 @@
 package spend;
 
+import java.util.List;
 import java.util.Scanner;
 
 public class Console 
 {
+    private List<Payment> Payments;
     public void Start() 
     {
         getPaymentFromCommandLine();
@@ -18,5 +20,8 @@ public class Console
         String price = scanner.nextLine();
         System.out.println("You entered this "+category+ " and this "+price);
         scanner.close();
+
     }
+
+   
 }
