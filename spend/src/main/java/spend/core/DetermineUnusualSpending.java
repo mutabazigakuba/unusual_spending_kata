@@ -9,9 +9,11 @@ public class DetermineUnusualSpending implements IDetermineUnusualSpending
     private List<Payment> userPayments;
     private ILocalDate _localDate;
 
-    public DetermineUnusualSpending(ILocalDate localDate) {
+    public DetermineUnusualSpending(ILocalDate localDate) 
+    {
         _localDate = localDate;
     }
+    
     public List<HighSpending> Compute(List<Payment> payments) 
     {
         userPayments = payments;

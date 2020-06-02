@@ -14,11 +14,11 @@ import spend.core.*;
 
 public class DetermineUnusualSpendingTest 
 {
-    DetermineUnusualSpending subject;
+    DetermineUnusualSpending determineUnusualSpending;
     LocalDate currentDate = LocalDate.of(2020, 06, 05);
     LocalDate previousDate = LocalDate.of(2020, 05, 04);
-    ILocalDate datetime = new ILocalDate(){
-        
+    ILocalDate datetime = new ILocalDate()
+    {    
         @Override
         public LocalDate getDate()
         {
@@ -33,10 +33,10 @@ public class DetermineUnusualSpendingTest
             new Payment(150, Category.TRAVEL, 1, currentDate),
             new Payment(200, Category.TRAVEL, 1, previousDate)
         );
-        subject = new DetermineUnusualSpending(datetime);
+        determineUnusualSpending = new DetermineUnusualSpending(datetime);
 
         List<HighSpending> expectedList = new ArrayList<>();
-        List<HighSpending> actualList = subject.Compute(paymentList);
+        List<HighSpending> actualList = determineUnusualSpending.Compute(paymentList);
 
         assertEquals(expectedList, actualList);
     }
@@ -48,10 +48,10 @@ public class DetermineUnusualSpendingTest
             new Payment(100, Category.TRAVEL, 1, currentDate),
             new Payment(50, Category.TRAVEL, 1, previousDate)
         );
-        subject = new DetermineUnusualSpending(datetime);
+        determineUnusualSpending = new DetermineUnusualSpending(datetime);
 
         List<HighSpending> expectedList = Arrays.asList(new HighSpending(150, Category.TRAVEL));
-        List<HighSpending> actualList = subject.Compute(paymentList);
+        List<HighSpending> actualList = determineUnusualSpending.Compute(paymentList);
 
         assertThat("all of same size", actualList.size(), is(expectedList.size()));
         assertEquals(1, actualList.size());
@@ -68,14 +68,14 @@ public class DetermineUnusualSpendingTest
             new Payment(70, Category.GROCERIES, 1, previousDate),
             new Payment(50, Category.ENTERNAINMENT, 1, currentDate)
             );
-        subject = new DetermineUnusualSpending(datetime);
+        determineUnusualSpending = new DetermineUnusualSpending(datetime);
         List<HighSpending> unsusalSpendingList = Arrays.asList(
             new HighSpending(150, Category.TRAVEL),
             new HighSpending(170, Category.GROCERIES)
             );
 
         List<HighSpending> expectedList = unsusalSpendingList;
-        List<HighSpending> actualList = subject.Compute(paymentList);
+        List<HighSpending> actualList = determineUnusualSpending.Compute(paymentList);
 
         assertThat("All are of the same size", expectedList.size(), is(actualList.size()));
         assertEquals(2, actualList.size());
@@ -87,8 +87,8 @@ public class DetermineUnusualSpendingTest
     {
         LocalDate currentDate = LocalDate.of(2020, 01, 05);
         LocalDate previousDate = LocalDate.of(2019, 12, 04);
-        ILocalDate datetime = new ILocalDate(){
-            
+        ILocalDate datetime = new ILocalDate()
+        {    
             @Override
             public LocalDate getDate()
             {
@@ -100,10 +100,10 @@ public class DetermineUnusualSpendingTest
             new Payment(100, Category.TRAVEL, 1, currentDate),
             new Payment(50, Category.TRAVEL, 1, previousDate)
         );
-        subject = new DetermineUnusualSpending(datetime);
+        determineUnusualSpending = new DetermineUnusualSpending(datetime);
 
         List<HighSpending> expectedList = Arrays.asList(new HighSpending(150, Category.TRAVEL));
-        List<HighSpending> actualList = subject.Compute(paymentList);
+        List<HighSpending> actualList = determineUnusualSpending.Compute(paymentList);
 
         assertThat("all of same size", actualList.size(), is(expectedList.size()));
         assertEquals(1, actualList.size());

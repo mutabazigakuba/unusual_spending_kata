@@ -2,7 +2,7 @@ package spend.core;
 
 import java.time.LocalDate;
 
-public interface ILocalDate {
-   
+public interface ILocalDate 
+{
     LocalDate getDate();
 }
