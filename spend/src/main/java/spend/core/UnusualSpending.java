@@ -1,8 +1,6 @@
-package spend;
+package spend.core;
 
 import java.util.List;
-
-import spend.core.*;
 
 public class UnusualSpending
 {
@@ -23,5 +21,4 @@ public class UnusualSpending
         List<HighSpending> listOfHighSpendings = DetermineUnusualSpending.Compute(userPayments);
         Email.SendEmail(listOfHighSpendings);
     }
-    
 }
