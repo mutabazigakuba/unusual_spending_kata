@@ -13,10 +13,10 @@ public class Expenditures implements IPayments
     Scanner scanner = new Scanner(System.in);
     Category selectedCategory;
     Integer expenditure;
+    LocalDate localDate;
 
     public List<Payment> getPayments(Integer id) 
     {
-        Start();
         return consolePayments;
     }
 
@@ -28,6 +28,7 @@ public class Expenditures implements IPayments
         {
             getCategoryFromConsole();
             getExpenditureFromConsole();
+            getDateFromConsole();
             System.out.println("Add another payment? Type Y or N");
             Scanner scanner = new Scanner(System.in);
             String answer = scanner.nextLine();
@@ -45,7 +46,7 @@ public class Expenditures implements IPayments
                     scanner.close();
                     break;
             }
-            payments.add(new Payment(expenditure, selectedCategory, 1, LocalDate.now()));
+            payments.add(new Payment(expenditure, selectedCategory, 1, localDate));
         }
         consolePayments = payments;
         for (Payment payment : consolePayments) 
@@ -86,5 +87,15 @@ public class Expenditures implements IPayments
     {
         System.out.println("Enter category expenditure");
         expenditure = scanner.nextInt(); 
+    }
+
+    private void getDateFromConsole() 
+    {
+        System.out.println("Enter date in YY/MM/DD format");
+        Integer year = scanner.nextInt();
+        Integer month = scanner.nextInt();
+        Integer day = scanner.nextInt();
+
+        localDate = LocalDate.of(year, month, day);
     }
 }
