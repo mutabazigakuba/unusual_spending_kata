@@ -1,23 +1,27 @@
 package spend.console;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
 import spend.core.IPayments;
 import spend.core.Payment;
 
-public class Expenditures implements IPayments{
- 
-    
-    public List<Payment> getPayments() {
-
-        System.out.println("Enter payment category");
+public class Expenditures implements IPayments {
+    @Override
+    public List<Payment> getPayments(Integer id) 
+    {
         Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Select payment category");
         String category = scanner.nextLine();
+
         System.out.println("Enter payment price");
         String price = scanner.nextLine();
+
         System.out.println("You entered this "+category+ " and this "+price);
         scanner.close();
-        
-        Payment payment = new Payment(price, category, id, localDate)
 
-        return new List<Payment> { payment };
+        return  new ArrayList<>();
     }
 }
