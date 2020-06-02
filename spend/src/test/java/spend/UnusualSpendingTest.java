@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.MockitoJUnitRunner;
+import spend.core.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class UnusualSpendingTest 
@@ -27,7 +28,7 @@ public class UnusualSpendingTest
         subject.triggerEmail(1);
 
         verify(iPayments).getPayments(1);
-        verify(determineUnusualSpending).Compute(new ArrayList<Payments>());
+        verify(determineUnusualSpending).Compute(new ArrayList<Payment>());
         verify(iEmail).SendEmail(new ArrayList<HighSpending>());
     }
 

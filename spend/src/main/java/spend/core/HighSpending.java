@@ -1,4 +1,4 @@
-package spend;
+package spend.core;
 
 public class HighSpending 
 {

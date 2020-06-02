@@ -1,4 +1,4 @@
-package spend;
+package spend.core;
 
 import java.util.List;
 

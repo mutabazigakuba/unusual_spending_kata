@@ -3,34 +3,37 @@ package spend;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
-import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 import org.junit.Test;
-import org.mockito.InjectMocks;
 import static org.hamcrest.CoreMatchers.*;
+import spend.core.*;
 
 
 public class DetermineUnusualSpendingTest 
 {
-    @InjectMocks
     DetermineUnusualSpending subject;
-
-    LocalDate today = LocalDate.now();
-    Integer currentMonth = today.getMonthValue();
-    Integer previousMonth = currentMonth-1;
-    
+    LocalDate currentDate = LocalDate.of(2020, 06, 05);
+    LocalDate previousDate = LocalDate.of(2020, 05, 04);
+    ILocalDate datetime = new ILocalDate(){
+        
+        @Override
+        public LocalDate getDate()
+        {
+            return currentDate;
+        }
+    };
+  
     @Test
     public void zeroUnusualPaymentsByUser()
     {
-        List<Payments> paymentList = Arrays.asList(
-            new Payments(150, Category.TRAVEL, 1, new Date(2020, currentMonth, 22)),
-            new Payments(200, Category.TRAVEL, 1, new Date(2020, previousMonth, 22))
+        List<Payment> paymentList = Arrays.asList(
+            new Payment(150, Category.TRAVEL, 1, currentDate),
+            new Payment(200, Category.TRAVEL, 1, previousDate)
         );
-        subject = new DetermineUnusualSpending();
+        subject = new DetermineUnusualSpending(datetime);
 
         List<HighSpending> expectedList = new ArrayList<>();
         List<HighSpending> actualList = subject.Compute(paymentList);
@@ -41,37 +44,68 @@ public class DetermineUnusualSpendingTest
     @Test
     public void oneUnusualSpendingByUser()
     {
-        List<Payments> list = Arrays.asList(
-            new Payments(100, Category.TRAVEL, 1, new Date(2020, currentMonth, 22)),
-            new Payments(50, Category.TRAVEL, 1, new Date(2020, previousMonth, 22)),
-            new Payments(20, Category.ENTERNAINMENT, 1, new Date(2020, previousMonth, 3))
+        List<Payment> paymentList = Arrays.asList(
+            new Payment(100, Category.TRAVEL, 1, currentDate),
+            new Payment(50, Category.TRAVEL, 1, previousDate)
         );
-        subject = new DetermineUnusualSpending();
+        subject = new DetermineUnusualSpending(datetime);
 
         List<HighSpending> expectedList = Arrays.asList(new HighSpending(150, Category.TRAVEL));
-        List<HighSpending> actualList = subject.Compute(list);
+        List<HighSpending> actualList = subject.Compute(paymentList);
 
         assertThat("all of same size", actualList.size(), is(expectedList.size()));
+        assertEquals(1, actualList.size());
+        assertEquals(Category.TRAVEL, actualList.get(0).Cateogory);
     }
 
     @Test
     public void moreThanOneUnusualSpendingByuser()
     {
-        List<Payments> list = Arrays.asList(
-            new Payments(100, Category.TRAVEL, 1, new Date(2020, currentMonth, 22)),
-            new Payments(50, Category.TRAVEL, 1, new Date(2020, previousMonth, 22)),
-            new Payments(100, Category.GROCERIES, 1, new Date(2020, currentMonth, 22)),
-            new Payments(50, Category.GROCERIES, 1, new Date(2020, previousMonth, 22)),
-            new Payments(50, Category.ENTERNAINMENT, 1, new Date(2020, previousMonth, 22))
+        List<Payment> paymentList = Arrays.asList(
+            new Payment(100, Category.TRAVEL, 1, currentDate),
+            new Payment(50, Category.TRAVEL, 1, previousDate),
+            new Payment(100, Category.GROCERIES, 1, currentDate),
+            new Payment(70, Category.GROCERIES, 1, previousDate),
+            new Payment(50, Category.ENTERNAINMENT, 1, currentDate)
             );
-        subject = new DetermineUnusualSpending();
-        List<HighSpending> unsusalSpendingList = new ArrayList<>();
-        unsusalSpendingList.add(new HighSpending(150, Category.TRAVEL));
-        unsusalSpendingList.add(new HighSpending(150, Category.GROCERIES));
+        subject = new DetermineUnusualSpending(datetime);
+        List<HighSpending> unsusalSpendingList = Arrays.asList(
+            new HighSpending(150, Category.TRAVEL),
+            new HighSpending(170, Category.GROCERIES)
+            );
 
         List<HighSpending> expectedList = unsusalSpendingList;
-        List<HighSpending> actualList = subject.Compute(list);
+        List<HighSpending> actualList = subject.Compute(paymentList);
 
         assertThat("All are of the same size", expectedList.size(), is(actualList.size()));
+        assertEquals(2, actualList.size());
+        assertEquals(Category.TRAVEL, actualList.get(0).Cateogory);
+    }
+
+    @Test
+    public void oneUnusualSpendingByUserInDifferentYear()
+    {
+        LocalDate currentDate = LocalDate.of(2020, 01, 05);
+        LocalDate previousDate = LocalDate.of(2019, 12, 04);
+        ILocalDate datetime = new ILocalDate(){
+            
+            @Override
+            public LocalDate getDate()
+            {
+                return currentDate;
+            }
+        };
+        
+        List<Payment> paymentList = Arrays.asList(
+            new Payment(100, Category.TRAVEL, 1, currentDate),
+            new Payment(50, Category.TRAVEL, 1, previousDate)
+        );
+        subject = new DetermineUnusualSpending(datetime);
+
+        List<HighSpending> expectedList = Arrays.asList(new HighSpending(150, Category.TRAVEL));
+        List<HighSpending> actualList = subject.Compute(paymentList);
+
+        assertThat("all of same size", actualList.size(), is(expectedList.size()));
+        assertEquals(1, actualList.size());
     }
 }

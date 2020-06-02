@@ -2,6 +2,8 @@ package spend;
 
 import java.util.List;
 
+import spend.core.*;
+
 public class UnusualSpending
 {
     private IPayments Payment;
@@ -17,7 +19,7 @@ public class UnusualSpending
 
     public void triggerEmail(Integer id)
     { 
-        List<Payments> userPayments = Payment.getPayments(id);
+        List<Payment> userPayments = Payment.getPayments(id);
         List<HighSpending> listOfHighSpendings = DetermineUnusualSpending.Compute(userPayments);
         Email.SendEmail(listOfHighSpendings);
     }
