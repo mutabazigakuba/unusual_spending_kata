@@ -6,26 +6,31 @@ import java.util.List;
 import spend.core.DetermineUnusualSpending;
 import spend.core.HighSpending;
 import spend.core.ILocalDate;
+import spend.email.ConnectToGmail;
 import spend.email.Email;
 
 public class App 
 {
     public static void main(String[] args) 
     {
-        Expenditures expenditures = new Expenditures();
-        expenditures.Start();
 
-        DetermineUnusualSpending determineUnusualSpending = new DetermineUnusualSpending(new ILocalDate(){
-            @Override
-            public LocalDate getDate() {
-                return LocalDate.now();
-            }
-        }); 
-        List<HighSpending> highSpendings = determineUnusualSpending.Compute(expenditures.getPayments(1));
+        ConnectToGmail connectToGmail = new ConnectToGmail();
+        connectToGmail.sendEmail();
+        // Expenditures expenditures = new Expenditures();
+        // expenditures.Start();
 
-        Email email = new Email();
-        email.SendEmail(highSpendings);
+        // DetermineUnusualSpending determineUnusualSpending = new DetermineUnusualSpending(new ILocalDate(){
+        //     @Override
+        //     public LocalDate getDate() {
+        //         return LocalDate.now();
+        //     }
+        // }); 
+        // List<HighSpending> highSpendings = determineUnusualSpending.Compute(expenditures.getPayments(1));
 
-        System.out.println(email.message);
+        // Email email = new Email();
+        // email.SendEmail(highSpendings);
+
+        // System.out.println(email.message);
+
     }
 }
