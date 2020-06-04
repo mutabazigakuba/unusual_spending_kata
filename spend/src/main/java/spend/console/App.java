@@ -12,8 +12,8 @@ public class App
 {
     public static void main(String[] args) 
     {
-        Expenditures console = new Expenditures();
-        console.Start();
+        Expenditures expenditures = new Expenditures();
+        expenditures.Start();
 
         DetermineUnusualSpending determineUnusualSpending = new DetermineUnusualSpending(new ILocalDate(){
             @Override
@@ -21,7 +21,7 @@ public class App
                 return LocalDate.now();
             }
         }); 
-        List<HighSpending> highSpendings = determineUnusualSpending.Compute(console.getPayments(1));
+        List<HighSpending> highSpendings = determineUnusualSpending.Compute(expenditures.getPayments(1));
 
         Email email = new Email();
         email.SendEmail(highSpendings);
