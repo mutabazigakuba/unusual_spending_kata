@@ -1,23 +1,36 @@
 package spend.email;
 
 import java.util.List;
+
+import javax.mail.MessagingException;
+
 import spend.core.*;
 
-public class Email implements IEmail
-{
+public class Email implements IEmail {
     public String message = "";
 
-    public void SendEmail(List<HighSpending> highSpendings)
+    public void SendEmail(List<HighSpending> highSpendings) 
     {
-        if(highSpendings.isEmpty())
+        if (highSpendings.isEmpty()) 
         {
             message = "* You have no unusual spendings ";
-        }
-        else
+        } 
+        else 
         {
             for (HighSpending highSpending : highSpendings) {
-                message += "* You have spent "+highSpending.Price+" on "+highSpending.Cateogory+"\n";
+                message += "* You have spent " + highSpending.Price + " on " + highSpending.Cateogory + "\n";
             }
+            sendMessageToGmail();
+        }
+    }
+
+    private void sendMessageToGmail()
+    {
+        ConnectToGmail connectToGmail = new ConnectToGmail();
+        try {
+            connectToGmail.sendEmail("gakubar2@gmail.com", "Unusual Spendings Mail", message);
+        } catch (MessagingException e) {
+            e.printStackTrace();
         }
     }
 }

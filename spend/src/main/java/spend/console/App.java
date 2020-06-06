@@ -26,6 +26,5 @@ public class App
         Email email = new Email();
         email.SendEmail(highSpendings);
 
-        System.out.println(email.message);
     }
 }
